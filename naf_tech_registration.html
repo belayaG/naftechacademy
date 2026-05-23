@@ -1,0 +1,404 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>NAF Tech Academy — Class Registration</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.19.0/dist/tabler-icons.min.css" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: #F0F9FF;
+      min-height: 100vh;
+      padding: 2rem 1rem;
+      color: #0C4A6E;
+    }
+
+    .page-wrap { max-width: 680px; margin: 0 auto; padding-bottom: 3rem; }
+
+    .hero {
+      background: linear-gradient(135deg, #38BDF8, #0EA5E9);
+      border-radius: 12px;
+      padding: 1.5rem 1.75rem;
+      margin-bottom: 1.25rem;
+      color: #fff;
+    }
+    .hero-top { display: flex; align-items: center; gap: 12px; margin-bottom: 8px; }
+    .hero-icon {
+      width: 48px; height: 48px; border-radius: 8px;
+      background: rgba(255,255,255,0.2);
+      display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+    }
+    .hero-icon i { font-size: 24px; color: #fff; }
+    .hero h1 { font-size: 20px; font-weight: 600; line-height: 1.3; color: #fff; }
+    .hero p { font-size: 13px; color: rgba(255,255,255,0.85); margin-top: 4px; line-height: 1.5; }
+    .hero-badges { display: flex; flex-wrap: wrap; gap: 7px; margin-top: 12px; }
+    .badge {
+      font-size: 11px; font-weight: 500; padding: 4px 11px;
+      border-radius: 20px; background: rgba(255,255,255,0.2); color: #fff;
+    }
+
+    .section {
+      background: #fff;
+      border: 1px solid #BAE6FD;
+      border-radius: 12px;
+      padding: 1.25rem 1.5rem;
+      margin-bottom: 1rem;
+    }
+    .section-title {
+      font-size: 11px; font-weight: 600; letter-spacing: 0.07em;
+      text-transform: uppercase; color: #0369A1; margin-bottom: 1rem;
+    }
+
+    .field-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+    .field { display: flex; flex-direction: column; gap: 5px; }
+    .field.span2 { grid-column: span 2; }
+
+    label { font-size: 13px; font-weight: 500; color: #0369A1; }
+
+    input, select, textarea {
+      width: 100%;
+      font-family: inherit;
+      font-size: 14px;
+      color: #0C4A6E;
+      background: #F0F9FF;
+      border: 1px solid #BAE6FD;
+      border-radius: 8px;
+      padding: 9px 11px;
+      outline: none;
+      transition: border-color 0.15s, box-shadow 0.15s;
+    }
+    input:focus, select:focus, textarea:focus {
+      border-color: #0EA5E9;
+      box-shadow: 0 0 0 3px rgba(14,165,233,0.15);
+    }
+    textarea { resize: vertical; min-height: 72px; }
+
+    .route-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; }
+    .route-card {
+      border: 2px solid #BAE6FD; border-radius: 10px; padding: 14px;
+      cursor: pointer; transition: border-color 0.15s, background 0.15s;
+      position: relative; background: #fff;
+    }
+    .route-card:hover { border-color: #0EA5E9; background: #F0F9FF; }
+    .route-card.selected { border-color: #0EA5E9; background: #E0F2FE; }
+    .route-card input[type="radio"] { position: absolute; opacity: 0; pointer-events: none; }
+    .route-icon { font-size: 24px; margin-bottom: 8px; display: block; }
+    .route-name { font-size: 13px; font-weight: 600; color: #0C4A6E; line-height: 1.3; margin-bottom: 5px; }
+    .route-cert { font-size: 11px; color: #64748B; }
+    .route-cert span { font-weight: 600; color: #0284C7; }
+
+    .format-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; }
+    .format-card {
+      border: 2px solid #BAE6FD; border-radius: 10px; padding: 14px;
+      cursor: pointer; transition: border-color 0.15s, background 0.15s;
+      position: relative; text-align: center; background: #fff;
+    }
+    .format-card:hover { border-color: #0EA5E9; background: #F0F9FF; }
+    .format-card.selected { border-color: #0EA5E9; background: #E0F2FE; }
+    .format-card input[type="radio"] { position: absolute; opacity: 0; pointer-events: none; }
+    .format-icon { font-size: 22px; margin-bottom: 6px; display: block; }
+    .format-name { font-size: 13px; font-weight: 600; color: #0C4A6E; margin-bottom: 3px; }
+    .format-desc { font-size: 11px; color: #64748B; }
+
+    .setup-banner {
+      background: #FFF7ED; border: 1px solid #FDBA74;
+      border-radius: 10px; padding: 14px 16px; margin-bottom: 1.25rem;
+      font-size: 13px; color: #7C2D12; display: flex; gap: 10px; align-items: flex-start;
+    }
+    .setup-banner i { font-size: 16px; margin-top: 2px; flex-shrink: 0; color: #EA580C; }
+    .url-input-wrap { display: flex; gap: 8px; margin-top: 9px; }
+    .url-input-wrap input { flex: 1; font-size: 12px; background: #fff; }
+    .url-input-wrap button {
+      background: #0EA5E9; color: #fff; border: none;
+      border-radius: 8px; padding: 7px 16px;
+      font-size: 12px; font-weight: 600; cursor: pointer; white-space: nowrap;
+    }
+    .url-input-wrap button:hover { background: #0284C7; }
+
+    .submit-row {
+      display: flex; align-items: center;
+      justify-content: space-between; margin-top: 1.5rem; gap: 12px; flex-wrap: wrap;
+    }
+    .submit-note { font-size: 12px; color: #64748B; display: flex; align-items: center; gap: 6px; }
+    .submit-note i { font-size: 15px; color: #0EA5E9; }
+
+    .btn-submit {
+      background: #0EA5E9; color: #fff; border: none;
+      border-radius: 8px; padding: 11px 30px;
+      font-size: 14px; font-weight: 600; cursor: pointer;
+      display: flex; align-items: center; gap: 8px;
+      transition: background 0.15s, transform 0.1s;
+    }
+    .btn-submit:hover { background: #0284C7; }
+    .btn-submit:active { transform: scale(0.98); }
+    .btn-submit:disabled { background: #BAE6FD; cursor: not-allowed; color: #7DD3FC; }
+
+    .toast {
+      display: none; align-items: center; gap: 10px;
+      border-radius: 8px; padding: 13px 16px;
+      font-size: 14px; margin-top: 1rem;
+    }
+    .toast.success { display: flex; background: #ECFDF5; border: 1px solid #6EE7B7; color: #064E3B; }
+    .toast.error   { display: flex; background: #FEF2F2; border: 1px solid #FCA5A5; color: #7F1D1D; }
+
+    @media (max-width: 520px) {
+      .field-grid { grid-template-columns: 1fr; }
+      .field.span2 { grid-column: span 1; }
+      .route-grid, .format-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="page-wrap">
+
+  <div class="setup-banner" id="setupBanner">
+    <i class="ti ti-tool"></i>
+    <div>
+      <strong>Connect your Google Sheet</strong> — paste your Apps Script Web App URL to enable automatic saving.
+      <div class="url-input-wrap">
+        <input type="url" id="scriptUrl" placeholder="https://script.google.com/macros/s/.../exec" />
+        <button onclick="saveUrl()">Save URL</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="hero">
+    <div class="hero-top">
+      <div class="hero-icon"><i class="ti ti-shield-lock"></i></div>
+      <div>
+        <h1>NAF Tech Academy</h1>
+        <p>Your future in tech starts here. Choose the path that fits your life.</p>
+      </div>
+    </div>
+    <div class="hero-badges">
+      <span class="badge">✅ Beginner Friendly</span>
+      <span class="badge">✅ Live Instructor Support</span>
+      <span class="badge">✅ Hands-On Labs</span>
+      <span class="badge">✅ Evening & Weekend Classes</span>
+    </div>
+  </div>
+
+  <!-- Personal Info -->
+  <div class="section">
+    <div class="section-title">Personal information</div>
+    <div class="field-grid">
+      <div class="field">
+        <label for="firstName">First name</label>
+        <input type="text" id="firstName" placeholder="Jane" />
+      </div>
+      <div class="field">
+        <label for="lastName">Last name</label>
+        <input type="text" id="lastName" placeholder="Smith" />
+      </div>
+      <div class="field">
+        <label for="email">Email address</label>
+        <input type="email" id="email" placeholder="jane@example.com" />
+      </div>
+      <div class="field">
+        <label for="phone">Phone number</label>
+        <input type="tel" id="phone" placeholder="(469) 000-0000" />
+      </div>
+      <div class="field span2">
+        <label for="referral">How did you hear about NAF Tech Academy?</label>
+        <select id="referral">
+          <option value="">— Select one —</option>
+          <option>Social media</option>
+          <option>Google Search</option>
+          <option>Friend / Family referral</option>
+          <option>Flyer / Poster</option>
+          <option>Text message</option>
+          <option>Other</option>
+        </select>
+      </div>
+    </div>
+  </div>
+
+  <!-- Career Route -->
+  <div class="section">
+    <div class="section-title">Choose your career route</div>
+    <div class="route-grid">
+      <div class="route-card selected" onclick="selectRoute(this)">
+        <input type="radio" name="route" value="Cybersecurity — CompTIA Security+" checked />
+        <span class="route-icon">🛡</span>
+        <div class="route-name">Cybersecurity</div>
+        <div class="route-cert">Certification: <span>CompTIA Security+</span></div>
+      </div>
+      <div class="route-card" onclick="selectRoute(this)">
+        <input type="radio" name="route" value="IT Support — CompTIA A+" />
+        <span class="route-icon">💻</span>
+        <div class="route-name">IT Support & Technology</div>
+        <div class="route-cert">Certification: <span>CompTIA A+</span></div>
+      </div>
+      <div class="route-card" onclick="selectRoute(this)">
+        <input type="radio" name="route" value="Cloud & Infrastructure — CompTIA Cloud+" />
+        <span class="route-icon">☁️</span>
+        <div class="route-name">Cloud & Infrastructure</div>
+        <div class="route-cert">Certification: <span>CompTIA Cloud+</span></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Learning Format -->
+  <div class="section">
+    <div class="section-title">Learning format</div>
+    <div class="format-grid">
+      <div class="format-card selected" onclick="selectFormat(this)">
+        <input type="radio" name="format" value="Group Classes" checked />
+        <span class="format-icon">👥</span>
+        <div class="format-name">Group Classes</div>
+        <div class="format-desc">Learn with others at an affordable price</div>
+      </div>
+      <div class="format-card" onclick="selectFormat(this)">
+        <input type="radio" name="format" value="1-on-1 Training" />
+        <span class="format-icon">👨‍🏫</span>
+        <div class="format-name">1-on-1 Training</div>
+        <div class="format-desc">Personalized coaching, flexible schedule</div>
+      </div>
+      <div class="format-card" onclick="selectFormat(this)">
+        <input type="radio" name="format" value="Fast-Track" />
+        <span class="format-icon">⚡</span>
+        <div class="format-name">Fast-Track</div>
+        <div class="format-desc">Get certified faster</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Schedule -->
+  <div class="section">
+    <div class="section-title">Schedule preference</div>
+    <div class="field-grid">
+      <div class="field">
+        <label for="schedPref">Preferred time</label>
+        <select id="schedPref">
+          <option value="">— Select preference —</option>
+          <option>Weekday mornings</option>
+          <option>Weekday evenings</option>
+          <option>Weekends</option>
+          <option>Flexible / Any time</option>
+        </select>
+      </div>
+      <div class="field">
+        <label for="startDate">Preferred start date</label>
+        <input type="date" id="startDate" />
+      </div>
+      <div class="field span2">
+        <label for="goals">Anything else you'd like us to know?</label>
+        <textarea id="goals" placeholder="E.g. I work full-time, have kids, need evening classes..."></textarea>
+      </div>
+    </div>
+  </div>
+
+  <div class="submit-row">
+    <span class="submit-note"><i class="ti ti-phone"></i> 469-877-7106 / 945-346-7273</span>
+    <button class="btn-submit" id="submitBtn" onclick="handleSubmit()">
+      <i class="ti ti-send"></i> Submit registration
+    </button>
+  </div>
+
+  <div class="toast" id="toast"></div>
+
+</div>
+
+<script>
+  var STORAGE_KEY = 'naf_script_url';
+
+  function saveUrl() {
+    var url = document.getElementById('scriptUrl').value.trim();
+    if (!url.startsWith('https://script.google.com')) {
+      showToast('Please enter a valid Google Apps Script URL.', true);
+      return;
+    }
+    localStorage.setItem(STORAGE_KEY, url);
+    document.getElementById('setupBanner').style.display = 'none';
+    showToast("Google Sheet connected! You're all set.", false);
+  }
+
+  (function () {
+    var saved = localStorage.getItem(STORAGE_KEY);
+    if (saved) {
+      document.getElementById('scriptUrl').value = saved;
+      document.getElementById('setupBanner').style.display = 'none';
+    }
+  })();
+
+  function selectRoute(card) {
+    document.querySelectorAll('.route-card').forEach(function (c) { c.classList.remove('selected'); });
+    card.classList.add('selected');
+    card.querySelector('input[type="radio"]').checked = true;
+  }
+
+  function selectFormat(card) {
+    document.querySelectorAll('.format-card').forEach(function (c) { c.classList.remove('selected'); });
+    card.classList.add('selected');
+    card.querySelector('input[type="radio"]').checked = true;
+  }
+
+  function getSelected(name) {
+    var el = document.querySelector('input[name="' + name + '"]:checked');
+    return el ? el.value : '';
+  }
+
+  function showToast(msg, isError) {
+    var t = document.getElementById('toast');
+    t.textContent = msg;
+    t.className = 'toast ' + (isError ? 'error' : 'success');
+    setTimeout(function () { t.className = 'toast'; }, 6000);
+  }
+
+  async function handleSubmit() {
+    var scriptUrl = localStorage.getItem(STORAGE_KEY) || document.getElementById('scriptUrl').value.trim();
+    var firstName = document.getElementById('firstName').value.trim();
+    var lastName  = document.getElementById('lastName').value.trim();
+    var email     = document.getElementById('email').value.trim();
+
+    if (!firstName || !lastName || !email) {
+      showToast('Please fill in your first name, last name, and email.', true);
+      return;
+    }
+    if (!scriptUrl) {
+      showToast('Please paste your Google Apps Script URL in the setup banner above.', true);
+      return;
+    }
+
+    var btn = document.getElementById('submitBtn');
+    btn.disabled = true;
+    btn.innerHTML = '<i class="ti ti-loader"></i> Submitting…';
+
+    var payload = {
+      timestamp:          new Date().toLocaleString(),
+      firstName:          firstName,
+      lastName:           lastName,
+      email:              email,
+      phone:              document.getElementById('phone').value,
+      referral:           document.getElementById('referral').value,
+      careerRoute:        getSelected('route'),
+      learningFormat:     getSelected('format'),
+      schedulePreference: document.getElementById('schedPref').value,
+      startDate:          document.getElementById('startDate').value,
+      additionalInfo:     document.getElementById('goals').value
+    };
+
+    try {
+      await fetch(scriptUrl, {
+        method: 'POST',
+        mode: 'no-cors',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload)
+      });
+      showToast('Registration submitted! Welcome to NAF Tech Academy — we will be in touch soon.', false);
+      btn.innerHTML = '<i class="ti ti-check"></i> Submitted!';
+      btn.style.background = '#0284C7';
+    } catch (err) {
+      showToast('Submission failed. Check your Apps Script URL and try again.', true);
+      btn.disabled = false;
+      btn.innerHTML = '<i class="ti ti-send"></i> Submit registration';
+    }
+  }
+</script>
+
+</body>
+</html>
